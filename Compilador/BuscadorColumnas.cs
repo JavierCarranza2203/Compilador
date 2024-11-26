@@ -14,6 +14,7 @@ namespace Compilador
         public BuscadorColumnas()
         {
             BuscadorCaracteres["_"] = "_";
+            BuscadorCaracteres[" "] = "FDC";
 
             for (int i = 0; i < 10; i++)
             {

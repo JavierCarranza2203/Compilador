@@ -5,14 +5,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Compilador
 {
     internal class Matriz
     {
-        private MySqlConnection connection;
-        private BuscadorColumnas buscadorColumnas;
-        private string nombreDeTabla;
+        private readonly MySqlConnection connection;
+        private readonly BuscadorColumnas buscadorColumnas;
+        private readonly string nombreDeTabla;
 
         public Matriz()
         {
@@ -21,45 +22,40 @@ namespace Compilador
             this.nombreDeTabla = "estados1";
         }
 
-        public Estado EvaluarCaracter(string caracter, int numeroEstado)
+        public string EvaluarCaracter(string caracter, string numeroEstado)
         {
-            MySqlDataReader dr = this.ConsultarTabla("SELECT " + buscadorColumnas.ObtenerClave(caracter) + " FROM " + this.nombreDeTabla + " WHERE ESTADO = " + numeroEstado);
-
+            MySqlDataReader dr = this.ConsultarTabla("SELECT " + this.nombreDeTabla + "." + buscadorColumnas.ObtenerClave(caracter) + " FROM " + this.nombreDeTabla + " WHERE ESTADO = " + numeroEstado);
             this.ValidarDatosDB(dr.Read(), "Error al evaluar el caracter");
 
-            Estado miEstado = new Estado(int.Parse(dr[buscadorColumnas.ObtenerClave(caracter)].ToString()));
+            string siguienteEstado = dr[buscadorColumnas.ObtenerClave(caracter)].ToString();
             this.connection.Close();
 
-            return miEstado;
+            return siguienteEstado;
         }
 
-        public string ObtenerToken(int numeroEstado, string caracter)
+        public Token ObtenerToken(string estadoAnterior, string estadoSiguiente, bool finDeCadenaIncorrecto, string palabra)
         {
-            MySqlDataReader dr = this.ConsultarTabla("SELECT FDC FROM " + this.nombreDeTabla + " WHERE ESTADO = " + numeroEstado);
+            string estadoObjetivo = this.ValidarEstadoSiguiente(estadoSiguiente)? estadoAnterior : this.EvaluarCaracter(" ", estadoSiguiente);
 
-            this.ValidarDatosDB(dr.Read(), "Error al leer el FDC, revise que sea un espacio en blanco");
+            if (estadoObjetivo == "ERROR") estadoObjetivo = estadoSiguiente;
 
-            if (dr["FDC"].ToString() == "ACEPTAR" || dr["FDC"].ToString() == "ERROR")
-            {
-                this.connection.Close();
+            string token = this.ObtenerCategoria(estadoObjetivo);
 
-                string token = this.ObtenerCategoria(numeroEstado);
-                this.connection.Close();
+            if (finDeCadenaIncorrecto) token = "FDCE";
+            this.connection.Close();
 
-                return token;
-            }
-            else
-            {
-                int estadoDeError = int.Parse(dr["FDC"].ToString());
-                this.connection.Close();
-                string token = this.ObtenerCategoria(estadoDeError);
-                this.connection.Close();
+            MySqlDataReader dr = this.ConsultarTabla("SELECT * FROM tokens WHERE ID = '" + token + "'");
 
-                return token;
-            }
+            this.ValidarDatosDB(dr.Read(), "Error al obtener el token");
+
+            Token miToken = new Token(palabra, dr["CATEGORIA"].ToString() == "ERROR", dr["DESCRIPCION"].ToString(), dr["ID"].ToString());
+
+            this.connection.Close();
+
+            return miToken;
         }
 
-        private string ObtenerCategoria(int numeroEstado)
+        private string ObtenerCategoria(string numeroEstado)
         {
             MySqlDataReader dr = this.ConsultarTabla("SELECT CATEGORIA FROM " + this.nombreDeTabla + " WHERE ESTADO = " + numeroEstado);
 
@@ -84,6 +80,11 @@ namespace Compilador
             this.connection.Open();
 
             return cmd.ExecuteReader();
+        }
+
+        public bool ValidarEstadoSiguiente(string estadoSiguiente)
+        {
+            return (estadoSiguiente == "ACEPTAR" || estadoSiguiente == "ERROR");
         }
     }
 }
