@@ -13,6 +13,8 @@ namespace Compilador
 {
     public partial class frmIDE : Form
     {
+        private Dictionary<string, string> Identificadores = new Dictionary<string, string>();
+
         public frmIDE()
         {
             InitializeComponent();
@@ -51,6 +53,7 @@ namespace Compilador
 
                 Matriz matrizTransicion = new Matriz();
 
+
                 for (int i = 0; i < arrayCadena.Length; i++)
                 {
                     cadenaActual += arrayCadena[i];
@@ -61,10 +64,10 @@ namespace Compilador
                         copiaCadena = this.MostrarArchivoDeTokens(copiaCadena, cadenaActual, token.Id);
 
 
-                        if (token.EsError == true)
-                            dgvTablaErrores.Rows.Add(token.Palabra, token.Descripcion);
-                        else 
+                        if (token.Id == "IDVAL")
                             dgvTablaSimbolos.Rows.Add(token.Palabra, token.Descripcion);
+                        else if (token.EsError)
+                            dgvTablaErrores.Rows.Add(token.Palabra, token.Descripcion);
 
                         estadoSiguiente = "0";
                         cadenaActual = "";
