@@ -50,6 +50,7 @@ namespace Compilador
                 string cadenaActual = "";
                 int contadorIdentificadores = 1;
                 List<Token> tokens = new List<Token>();
+                List<string> errores = new List<string> { "PRE1", "IDE2", "CNE3", "COE4", "CAE5", "OAE6", "OLE7", "ORE8", "CEE9", "0A10", "FDCE" };
 
                 Matriz matrizTransicion = new Matriz();
 
@@ -82,6 +83,7 @@ namespace Compilador
 
                             token.Id += contadorIdentificadores;
                             tokens.Add(token);
+                            errores.Add(token.Id);
                             contadorIdentificadores++;
 
                             dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
@@ -103,6 +105,7 @@ namespace Compilador
                 }
 
                 txtTokens.Text = copiaCadena;
+                ResaltarPalabrasClave(errores, Color.Red);
             }
             catch (Exception ex) 
             { 
@@ -155,5 +158,28 @@ namespace Compilador
                 MessageBox.Show("Archivo guardado con éxito en: " + saveFileDialog.FileName);
             }
         }
+
+
+        private void ResaltarPalabrasClave(List<string> palabrasClaves, Color color)
+        {
+            // Limpiar cualquier selección previa
+            txtTokens.SelectAll();
+            txtTokens.SelectionColor = Color.Black;
+
+            foreach (string palabraClave in palabrasClaves)
+            {
+                int startIndex = 0;
+                while ((startIndex = txtTokens.Text.IndexOf(palabraClave, startIndex)) != -1)
+                {
+                    // Selecciona la palabra encontrada
+                    txtTokens.Select(startIndex, palabraClave.Length);
+                    // Aplica el color a la selección
+                    txtTokens.SelectionColor = color;
+                    // Avanza el índice para continuar buscando la siguiente ocurrencia
+                    startIndex += palabraClave.Length;
+                }
+            }
+        }
+
     }
 }
