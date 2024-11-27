@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.dgvTablaErrores = new System.Windows.Forms.DataGridView();
-            this.CADENA = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LINEA = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ERROR = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtTokens = new System.Windows.Forms.RichTextBox();
             this.lblCodigo = new System.Windows.Forms.Label();
@@ -55,7 +55,7 @@
             this.dgvTablaErrores.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvTablaErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTablaErrores.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.CADENA,
+            this.LINEA,
             this.ERROR});
             this.dgvTablaErrores.Location = new System.Drawing.Point(26, 622);
             this.dgvTablaErrores.Name = "dgvTablaErrores";
@@ -67,12 +67,12 @@
             this.dgvTablaErrores.Size = new System.Drawing.Size(686, 463);
             this.dgvTablaErrores.TabIndex = 2;
             // 
-            // CADENA
+            // LINEA
             // 
-            this.CADENA.HeaderText = "CADENA";
-            this.CADENA.MinimumWidth = 10;
-            this.CADENA.Name = "CADENA";
-            this.CADENA.ReadOnly = true;
+            this.LINEA.HeaderText = "LINEA";
+            this.LINEA.MinimumWidth = 10;
+            this.LINEA.Name = "LINEA";
+            this.LINEA.ReadOnly = true;
             // 
             // ERROR
             // 
@@ -194,7 +194,7 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "TOKEN";
+            this.dataGridViewTextBoxColumn1.HeaderText = "NUM";
             this.dataGridViewTextBoxColumn1.MinimumWidth = 10;
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -245,11 +245,11 @@
         private System.Windows.Forms.DataGridView dgvTablaSimbolos;
         private System.Windows.Forms.RichTextBox txtCodigo;
         private System.Windows.Forms.Button btnComprobarErrores;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CADENA;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ERROR;
         private System.Windows.Forms.Button btnGuardarArchivo;
         private System.Windows.Forms.Button btnCargarArchivo;
         private System.Windows.Forms.Button btnGuardarArchivoTokens;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LINEA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ERROR;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }

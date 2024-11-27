@@ -54,10 +54,15 @@ namespace Compilador
 
                 Matriz matrizTransicion = new Matriz();
 
+                BuscadorColumnas bc = new BuscadorColumnas();
+
 
                 for (int i = 0; i < arrayCadena.Length; i++)
                 {
                     cadenaActual += arrayCadena[i];
+
+                    char[] arrayActual = cadenaActual.ToCharArray();
+                    bool palabraExiste = false;
                     if (i == arrayCadena.Length - 1 || arrayCadena[i].ToString() == " " || matrizTransicion.ValidarEstadoSiguiente(estadoSiguiente))
                     {
                         Token token = matrizTransicion.ObtenerToken(estadoAnterior, estadoSiguiente, arrayCadena[i].ToString() != " ", cadenaActual);
@@ -66,13 +71,20 @@ namespace Compilador
                         {
                             foreach (Token token2 in tokens)
                             {
-                                if (token2.Palabra == token.Palabra) return;
+                                if (token2.Palabra == token.Palabra) { 
+                                    palabraExiste = true; 
+
+                                    token.Id = token2.Id;
+                                }
                             }
 
-                            token.Id += contadorIdentificadores;
-                            tokens.Add(token);
-                            contadorIdentificadores++;
-                            dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
+                            if (palabraExiste == false)
+                            {
+                                token.Id += contadorIdentificadores;
+                                tokens.Add(token);
+                                contadorIdentificadores++;
+                                dgvTablaSimbolos.Rows.Add(contadorIdentificadores, token.Palabra);
+                            }
                         }
                         else if(token.Id == "IDE2")
                         {
@@ -86,11 +98,11 @@ namespace Compilador
                             errores.Add(token.Id);
                             contadorIdentificadores++;
 
-                            dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
-                            dgvTablaErrores.Rows.Add(token.Id, token.Descripcion);
+                            dgvTablaSimbolos.Rows.Add(contadorIdentificadores, token.Palabra);
+                            dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
                         }
                         else if (token.EsError)
-                            dgvTablaErrores.Rows.Add(token.Palabra, token.Descripcion);
+                            dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
 
                         copiaCadena = this.MostrarArchivoDeTokens(copiaCadena, cadenaActual, token.Id);
 
@@ -181,5 +193,22 @@ namespace Compilador
             }
         }
 
+
+        private string EncontrarNumeroLinea(string cadena)
+        {
+            // Supongamos que "richTextBox1" es tu RichTextBox y buscas la palabra "palabraClave".
+            int index = txtCodigo.Find(cadena); // Encuentra el índice de la palabra
+
+            if (index != -1) // Si se encuentra la palabra
+            {
+                int numeroLinea = txtCodigo.GetLineFromCharIndex(index); // Obtiene el número de línea
+                return (numeroLinea + 1).ToString();
+            }
+            else {
+                int index2 = txtCodigo.Find(cadena + " ");
+                int numeroLinea = txtCodigo.GetLineFromCharIndex(index2); // Obtiene el número de línea
+                return (numeroLinea + 1).ToString();
+            }
+        }
     }
 }
