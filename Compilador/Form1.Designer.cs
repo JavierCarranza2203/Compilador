@@ -37,13 +37,15 @@
             this.lblTablaErrores = new System.Windows.Forms.Label();
             this.lblTablaSimbolos = new System.Windows.Forms.Label();
             this.dgvTablaSimbolos = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtCodigo = new System.Windows.Forms.RichTextBox();
             this.btnComprobarErrores = new System.Windows.Forms.Button();
             this.btnGuardarArchivo = new System.Windows.Forms.Button();
             this.btnCargarArchivo = new System.Windows.Forms.Button();
             this.btnGuardarArchivoTokens = new System.Windows.Forms.Button();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtNumCodigo = new System.Windows.Forms.TextBox();
+            this.txtNumTokens = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaErrores)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaSimbolos)).BeginInit();
             this.SuspendLayout();
@@ -83,9 +85,10 @@
             // 
             // txtTokens
             // 
-            this.txtTokens.Location = new System.Drawing.Point(754, 47);
+            this.txtTokens.Location = new System.Drawing.Point(790, 47);
             this.txtTokens.Name = "txtTokens";
-            this.txtTokens.Size = new System.Drawing.Size(686, 452);
+            this.txtTokens.ReadOnly = true;
+            this.txtTokens.Size = new System.Drawing.Size(653, 452);
             this.txtTokens.TabIndex = 4;
             this.txtTokens.Text = "";
             // 
@@ -144,13 +147,28 @@
             this.dgvTablaSimbolos.Size = new System.Drawing.Size(686, 463);
             this.dgvTablaSimbolos.TabIndex = 10;
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "NUM";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 10;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "IDENTIFICADOR";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 10;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
             // txtCodigo
             // 
-            this.txtCodigo.Location = new System.Drawing.Point(26, 47);
+            this.txtCodigo.Location = new System.Drawing.Point(76, 47);
             this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(686, 452);
+            this.txtCodigo.Size = new System.Drawing.Size(636, 452);
             this.txtCodigo.TabIndex = 3;
             this.txtCodigo.Text = "";
+            this.txtCodigo.TextChanged += new System.EventHandler(this.txtCodigo_TextChanged);
             // 
             // btnComprobarErrores
             // 
@@ -192,25 +210,31 @@
             this.btnGuardarArchivoTokens.UseVisualStyleBackColor = true;
             this.btnGuardarArchivoTokens.Click += new System.EventHandler(this.btnGuardarArchivoTokens_Click);
             // 
-            // dataGridViewTextBoxColumn1
+            // txtNumCodigo
             // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "NUM";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 10;
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.txtNumCodigo.Location = new System.Drawing.Point(26, 47);
+            this.txtNumCodigo.Multiline = true;
+            this.txtNumCodigo.Name = "txtNumCodigo";
+            this.txtNumCodigo.ReadOnly = true;
+            this.txtNumCodigo.Size = new System.Drawing.Size(50, 452);
+            this.txtNumCodigo.TabIndex = 15;
             // 
-            // dataGridViewTextBoxColumn2
+            // txtNumTokens
             // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "IDENTIFICADOR";
-            this.dataGridViewTextBoxColumn2.MinimumWidth = 10;
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.txtNumTokens.Location = new System.Drawing.Point(741, 48);
+            this.txtNumTokens.Multiline = true;
+            this.txtNumTokens.Name = "txtNumTokens";
+            this.txtNumTokens.ReadOnly = true;
+            this.txtNumTokens.Size = new System.Drawing.Size(50, 451);
+            this.txtNumTokens.TabIndex = 16;
             // 
             // frmIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1473, 1107);
+            this.Controls.Add(this.txtNumTokens);
+            this.Controls.Add(this.txtNumCodigo);
             this.Controls.Add(this.btnGuardarArchivoTokens);
             this.Controls.Add(this.btnCargarArchivo);
             this.Controls.Add(this.btnGuardarArchivo);
@@ -252,6 +276,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ERROR;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.TextBox txtNumCodigo;
+        private System.Windows.Forms.TextBox txtNumTokens;
     }
 }
 

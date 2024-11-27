@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing.Drawing2D;
 
 namespace Compilador
 {
@@ -20,17 +23,11 @@ namespace Compilador
 
         private string MostrarArchivoDeTokens(string copiaCadena, string cadenaActual, string token)
         {
-            if (copiaCadena.Contains(cadenaActual.Trim()))
-            {
-                // Encuentra la primera ocurrencia de "cadenaActual"
-                int index = copiaCadena.IndexOf(cadenaActual.Trim());
+            // Crear una expresión regular que coincida exactamente con el token, incluyendo caracteres especiales
+            string pattern = $@"(?<!\w){Regex.Escape(cadenaActual.Trim())}(?!\w)";
 
-                // Reemplaza solo la primer ocurrencia encontrada
-                if (index >= 0)
-                {
-                    copiaCadena = copiaCadena.Substring(0, index) + token + copiaCadena.Substring(index + cadenaActual.Trim().Length);
-                }
-            }
+            // Reemplazar el patrón encontrado por el nuevo token
+            copiaCadena = Regex.Replace(copiaCadena, pattern, token);
 
             return copiaCadena;
         }
@@ -83,10 +80,10 @@ namespace Compilador
                                 token.Id += contadorIdentificadores;
                                 tokens.Add(token);
                                 contadorIdentificadores++;
-                                dgvTablaSimbolos.Rows.Add(contadorIdentificadores, token.Palabra);
+                                dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
                             }
                         }
-                        else if(token.Id == "IDE2")
+                        else if(token.Id == "IDENV")
                         {
                             foreach (Token token2 in tokens)
                             {
@@ -98,7 +95,7 @@ namespace Compilador
                             errores.Add(token.Id);
                             contadorIdentificadores++;
 
-                            dgvTablaSimbolos.Rows.Add(contadorIdentificadores, token.Palabra);
+                            dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
                             dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
                         }
                         else if (token.EsError)
@@ -118,6 +115,7 @@ namespace Compilador
 
                 txtTokens.Text = copiaCadena;
                 ResaltarPalabrasClave(errores, Color.Red);
+                ActualizarNumerosTokens();
             }
             catch (Exception ex) 
             { 
@@ -196,7 +194,6 @@ namespace Compilador
 
         private string EncontrarNumeroLinea(string cadena)
         {
-            // Supongamos que "richTextBox1" es tu RichTextBox y buscas la palabra "palabraClave".
             int index = txtCodigo.Find(cadena); // Encuentra el índice de la palabra
 
             if (index != -1) // Si se encuentra la palabra
@@ -209,6 +206,43 @@ namespace Compilador
                 int numeroLinea = txtCodigo.GetLineFromCharIndex(index2); // Obtiene el número de línea
                 return (numeroLinea + 1).ToString();
             }
+        }
+
+        private void ActualizarNumerosYContenido()
+        {
+            // Obtén todas las líneas del RichTextBox
+            string[] lineas = txtCodigo.Lines;
+
+            // Construye el texto para el TextBox con números de línea
+            string contenidoConNumeros = "";
+            for (int i = 0; i < lineas.Length; i++)
+            {
+                contenidoConNumeros += $"{i + 1}{Environment.NewLine}";
+            }
+
+            // Asigna el texto al TextBox
+            txtNumCodigo.Text = contenidoConNumeros;
+        }
+
+        private void ActualizarNumerosTokens()
+        {
+            // Obtén todas las líneas del RichTextBox
+            string[] lineas2 = txtTokens.Lines;
+
+            // Construye el texto para el TextBox con números de línea
+            string contenidoConNumeros2 = "";
+            for (int i = 0; i < lineas2.Length; i++)
+            {
+                contenidoConNumeros2 += $"{i + 1}{Environment.NewLine}";
+            }
+
+            // Asigna el texto al TextBox
+            txtNumTokens.Text = contenidoConNumeros2;
+        }
+
+        private void txtCodigo_TextChanged(object sender, EventArgs e)
+        {
+            ActualizarNumerosYContenido();
         }
     }
 }
