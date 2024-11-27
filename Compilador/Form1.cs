@@ -13,8 +13,6 @@ namespace Compilador
 {
     public partial class frmIDE : Form
     {
-        private Dictionary<string, string> Identificadores = new Dictionary<string, string>();
-
         public frmIDE()
         {
             InitializeComponent();
@@ -50,6 +48,8 @@ namespace Compilador
                 char[] arrayCadena = codigoLimpio.ToCharArray();
                 string estadoAnterior = "", estadoSiguiente = "0";
                 string cadenaActual = "";
+                int contadorIdentificadores = 1;
+                List<Token> tokens = new List<Token>();
 
                 Matriz matrizTransicion = new Matriz();
 
@@ -61,13 +61,36 @@ namespace Compilador
                     {
                         Token token = matrizTransicion.ObtenerToken(estadoAnterior, estadoSiguiente, arrayCadena[i].ToString() != " ", cadenaActual);
 
-                        copiaCadena = this.MostrarArchivoDeTokens(copiaCadena, cadenaActual, token.Id);
-
-
                         if (token.Id == "IDVAL")
-                            dgvTablaSimbolos.Rows.Add(token.Palabra, token.Descripcion);
+                        {
+                            foreach (Token token2 in tokens)
+                            {
+                                if (token2.Palabra == token.Palabra) return;
+                            }
+
+                            token.Id += contadorIdentificadores;
+                            tokens.Add(token);
+                            contadorIdentificadores++;
+                            dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
+                        }
+                        else if(token.Id == "IDE2")
+                        {
+                            foreach (Token token2 in tokens)
+                            {
+                                if (token2.Palabra == token.Palabra) return;
+                            }
+
+                            token.Id += contadorIdentificadores;
+                            tokens.Add(token);
+                            contadorIdentificadores++;
+
+                            dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
+                            dgvTablaErrores.Rows.Add(token.Id, token.Descripcion);
+                        }
                         else if (token.EsError)
                             dgvTablaErrores.Rows.Add(token.Palabra, token.Descripcion);
+
+                        copiaCadena = this.MostrarArchivoDeTokens(copiaCadena, cadenaActual, token.Id);
 
                         estadoSiguiente = "0";
                         cadenaActual = "";
