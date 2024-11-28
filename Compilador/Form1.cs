@@ -47,19 +47,18 @@ namespace Compilador
                 string cadenaActual = "";
                 int contadorIdentificadores = 1;
                 List<Token> tokens = new List<Token>();
-                List<string> errores = new List<string> { "PRE1", "IDE2", "CNE3", "COE4", "CAE5", "OAE6", "OLE7", "ORE8", "CEE9", "0A10", "FDCE" };
+                List<string> errores = new List<string> { "PRNV", "IDNV", "CNNV", "CONV", "CANV", "OANV", "OLNV", "OPRNV", "CENV", "OASNV", "FDCE" };
 
                 Matriz matrizTransicion = new Matriz();
 
                 BuscadorColumnas bc = new BuscadorColumnas();
 
-
                 for (int i = 0; i < arrayCadena.Length; i++)
                 {
                     cadenaActual += arrayCadena[i];
 
-                    char[] arrayActual = cadenaActual.ToCharArray();
                     bool palabraExiste = false;
+
                     if (i == arrayCadena.Length - 1 || arrayCadena[i].ToString() == " " || matrizTransicion.ValidarEstadoSiguiente(estadoSiguiente))
                     {
                         Token token = matrizTransicion.ObtenerToken(estadoAnterior, estadoSiguiente, arrayCadena[i].ToString() != " ", cadenaActual);
@@ -80,10 +79,11 @@ namespace Compilador
                                 token.Id += contadorIdentificadores;
                                 tokens.Add(token);
                                 contadorIdentificadores++;
+
                                 dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
                             }
                         }
-                        else if(token.Id == "IDENV")
+                        else if(token.Id == "IDNV")
                         {
                             foreach (Token token2 in tokens)
                             {
@@ -92,8 +92,8 @@ namespace Compilador
 
                             token.Id += contadorIdentificadores;
                             tokens.Add(token);
-                            errores.Add(token.Id);
                             contadorIdentificadores++;
+                            errores.Add(token.Id);
 
                             dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
                             dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
@@ -125,17 +125,7 @@ namespace Compilador
 
         private void btnGuardarArchivo_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "Archivos de texto (*.txt)|*.txt",
-                Title = "Guardar archivo de texto"
-            };
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                File.WriteAllText(saveFileDialog.FileName, txtCodigo.Text);
-                MessageBox.Show("Archivo guardado con éxito en: " + saveFileDialog.FileName);
-            }
+            GuardarArchivo();
         }
 
         private void btnCargarArchivo_Click(object sender, EventArgs e)
@@ -156,17 +146,7 @@ namespace Compilador
 
         private void btnGuardarArchivoTokens_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "Archivos de texto (*.txt)|*.txt",
-                Title = "Guardar archivo de texto"
-            };
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                File.WriteAllText(saveFileDialog.FileName, txtTokens.Text);
-                MessageBox.Show("Archivo guardado con éxito en: " + saveFileDialog.FileName);
-            }
+            GuardarArchivo();
         }
 
 
@@ -243,6 +223,21 @@ namespace Compilador
         private void txtCodigo_TextChanged(object sender, EventArgs e)
         {
             ActualizarNumerosYContenido();
+        }
+
+        private void GuardarArchivo()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Archivos de texto (*.txt)|*.txt",
+                Title = "Guardar archivo de texto"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, txtCodigo.Text);
+                MessageBox.Show("Archivo guardado con éxito en: " + saveFileDialog.FileName);
+            }
         }
     }
 }
