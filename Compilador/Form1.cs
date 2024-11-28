@@ -23,11 +23,22 @@ namespace Compilador
 
         private string MostrarArchivoDeTokens(string copiaCadena, string cadenaActual, string token)
         {
-            // Crear una expresión regular que coincida exactamente con el token, incluyendo caracteres especiales
+            // Crear una expresión regular que coincida exactamente con la cadenaActual
             string pattern = $@"(?<!\w){Regex.Escape(cadenaActual.Trim())}(?!\w)";
 
-            // Reemplazar el patrón encontrado por el nuevo token
-            copiaCadena = Regex.Replace(copiaCadena, pattern, token);
+            // Variable para indicar si ya se hizo un reemplazo
+            bool reemplazoHecho = false;
+
+            // Usar MatchEvaluator para reemplazar solo la primera ocurrencia
+            copiaCadena = Regex.Replace(copiaCadena, pattern, match =>
+            {
+                if (!reemplazoHecho)
+                {
+                    reemplazoHecho = true;  // Marcar que ya se hizo el reemplazo
+                    return token;           // Reemplazar por el token
+                }
+                return match.Value; // Devolver el valor original si ya se hizo el reemplazo
+            });
 
             return copiaCadena;
         }
@@ -52,6 +63,8 @@ namespace Compilador
                 Matriz matrizTransicion = new Matriz();
 
                 BuscadorColumnas bc = new BuscadorColumnas();
+                bool error = false;
+                Token token = new Token("", false, "", "");
 
                 for (int i = 0; i < arrayCadena.Length; i++)
                 {
@@ -61,14 +74,15 @@ namespace Compilador
 
                     if (i == arrayCadena.Length - 1 || arrayCadena[i].ToString() == " " || matrizTransicion.ValidarEstadoSiguiente(estadoSiguiente))
                     {
-                        Token token = matrizTransicion.ObtenerToken(estadoAnterior, estadoSiguiente, arrayCadena[i].ToString() != " ", cadenaActual);
+                        token = matrizTransicion.ObtenerToken(estadoAnterior, estadoSiguiente, arrayCadena[i].ToString() != " ", cadenaActual);
 
                         if (token.Id == "IDVAL")
                         {
                             foreach (Token token2 in tokens)
                             {
-                                if (token2.Palabra == token.Palabra) { 
-                                    palabraExiste = true; 
+                                if (token2.Palabra == token.Palabra)
+                                {
+                                    palabraExiste = true;
 
                                     token.Id = token2.Id;
                                 }
@@ -83,7 +97,7 @@ namespace Compilador
                                 dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
                             }
                         }
-                        else if(token.Id == "IDNV")
+                        else if (token.Id == "IDNV")
                         {
                             foreach (Token token2 in tokens)
                             {
@@ -96,12 +110,19 @@ namespace Compilador
                             errores.Add(token.Id);
 
                             dgvTablaSimbolos.Rows.Add(token.Id, token.Palabra);
-                            dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
+                            //dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra, token.Id), token.Descripcion);
                         }
                         else if (token.EsError)
-                            dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra), token.Descripcion);
+                            continue;
+                            //dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra, token.Id), token.Descripcion);
 
                         copiaCadena = this.MostrarArchivoDeTokens(copiaCadena, cadenaActual, token.Id);
+                        txtTokens.Text = copiaCadena;
+
+                        if (token.EsError)
+                        {
+                            dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra, token.Id), token.Descripcion);
+                        }
 
                         estadoSiguiente = "0";
                         cadenaActual = "";
@@ -114,6 +135,13 @@ namespace Compilador
                 }
 
                 txtTokens.Text = copiaCadena;
+
+                if(error)
+                {
+                    dgvTablaErrores.Rows.Add(EncontrarNumeroLinea(token.Palabra, token.Id), token.Descripcion);
+                    error = false;
+                }
+
                 ResaltarPalabrasClave(errores, Color.Red);
                 ActualizarNumerosTokens();
             }
@@ -171,19 +199,19 @@ namespace Compilador
             }
         }
 
-
-        private string EncontrarNumeroLinea(string cadena)
+        private string EncontrarNumeroLinea(string cadena, string token)
         {
-            int index = txtCodigo.Find(cadena); // Encuentra el índice de la palabra
+            int index = txtTokens.Find(token); // Encuentra el índice de la palabra
 
             if (index != -1) // Si se encuentra la palabra
             {
-                int numeroLinea = txtCodigo.GetLineFromCharIndex(index); // Obtiene el número de línea
+                int numeroLinea = txtTokens.GetLineFromCharIndex(index); // Obtiene el número de línea
                 return (numeroLinea + 1).ToString();
             }
             else {
-                int index2 = txtCodigo.Find(cadena + " ");
+                int index2 = txtCodigo.Find(cadena);
                 int numeroLinea = txtCodigo.GetLineFromCharIndex(index2); // Obtiene el número de línea
+
                 return (numeroLinea + 1).ToString();
             }
         }

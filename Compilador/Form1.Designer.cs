@@ -88,7 +88,8 @@
             this.txtTokens.Location = new System.Drawing.Point(790, 47);
             this.txtTokens.Name = "txtTokens";
             this.txtTokens.ReadOnly = true;
-            this.txtTokens.Size = new System.Drawing.Size(653, 452);
+            this.txtTokens.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
+            this.txtTokens.Size = new System.Drawing.Size(1275, 452);
             this.txtTokens.TabIndex = 4;
             this.txtTokens.Text = "";
             // 
@@ -144,7 +145,7 @@
             this.dgvTablaSimbolos.RowHeadersWidth = 82;
             this.dgvTablaSimbolos.RowTemplate.Height = 33;
             this.dgvTablaSimbolos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvTablaSimbolos.Size = new System.Drawing.Size(686, 463);
+            this.dgvTablaSimbolos.Size = new System.Drawing.Size(1311, 463);
             this.dgvTablaSimbolos.TabIndex = 10;
             // 
             // dataGridViewTextBoxColumn1
@@ -204,7 +205,7 @@
             // 
             this.btnGuardarArchivoTokens.Location = new System.Drawing.Point(754, 505);
             this.btnGuardarArchivoTokens.Name = "btnGuardarArchivoTokens";
-            this.btnGuardarArchivoTokens.Size = new System.Drawing.Size(686, 47);
+            this.btnGuardarArchivoTokens.Size = new System.Drawing.Size(1311, 47);
             this.btnGuardarArchivoTokens.TabIndex = 14;
             this.btnGuardarArchivoTokens.Text = "Guardar archivo";
             this.btnGuardarArchivoTokens.UseVisualStyleBackColor = true;
@@ -232,7 +233,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1473, 1107);
+            this.ClientSize = new System.Drawing.Size(2166, 1107);
             this.Controls.Add(this.txtNumTokens);
             this.Controls.Add(this.txtNumCodigo);
             this.Controls.Add(this.btnGuardarArchivoTokens);
