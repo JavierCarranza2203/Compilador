@@ -46,6 +46,7 @@
             this.btnGuardarArchivoTokens = new System.Windows.Forms.Button();
             this.txtNumCodigo = new System.Windows.Forms.TextBox();
             this.txtNumTokens = new System.Windows.Forms.TextBox();
+            this.btnComprobarSintaxis = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaErrores)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaSimbolos)).BeginInit();
             this.SuspendLayout();
@@ -205,7 +206,7 @@
             // 
             this.btnGuardarArchivoTokens.Location = new System.Drawing.Point(754, 505);
             this.btnGuardarArchivoTokens.Name = "btnGuardarArchivoTokens";
-            this.btnGuardarArchivoTokens.Size = new System.Drawing.Size(1311, 47);
+            this.btnGuardarArchivoTokens.Size = new System.Drawing.Size(675, 47);
             this.btnGuardarArchivoTokens.TabIndex = 14;
             this.btnGuardarArchivoTokens.Text = "Guardar archivo";
             this.btnGuardarArchivoTokens.UseVisualStyleBackColor = true;
@@ -229,11 +230,22 @@
             this.txtNumTokens.Size = new System.Drawing.Size(50, 451);
             this.txtNumTokens.TabIndex = 16;
             // 
+            // btnComprobarSintaxis
+            // 
+            this.btnComprobarSintaxis.Location = new System.Drawing.Point(1435, 504);
+            this.btnComprobarSintaxis.Name = "btnComprobarSintaxis";
+            this.btnComprobarSintaxis.Size = new System.Drawing.Size(630, 49);
+            this.btnComprobarSintaxis.TabIndex = 17;
+            this.btnComprobarSintaxis.Text = "Comprobar sintáxis";
+            this.btnComprobarSintaxis.UseVisualStyleBackColor = true;
+            this.btnComprobarSintaxis.Click += new System.EventHandler(this.btnComprobarSintaxis_Click);
+            // 
             // frmIDE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2166, 1107);
+            this.Controls.Add(this.btnComprobarSintaxis);
             this.Controls.Add(this.txtNumTokens);
             this.Controls.Add(this.txtNumCodigo);
             this.Controls.Add(this.btnGuardarArchivoTokens);
@@ -279,6 +291,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.TextBox txtNumCodigo;
         private System.Windows.Forms.TextBox txtNumTokens;
+        private System.Windows.Forms.Button btnComprobarSintaxis;
     }
 }
 

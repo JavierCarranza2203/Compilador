@@ -1,0 +1,6 @@
+Begin
+
+   _intEdad = 9 
+
+
+End 

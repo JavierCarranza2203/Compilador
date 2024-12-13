@@ -21,6 +21,7 @@ namespace Compilador
             InitializeComponent();
         }
 
+
         private string MostrarArchivoDeTokens(string copiaCadena, string cadenaActual, string token)
         {
             // Crear una expresión regular que coincida exactamente con la cadenaActual
@@ -266,6 +267,32 @@ namespace Compilador
                 File.WriteAllText(saveFileDialog.FileName, txtCodigo.Text);
                 MessageBox.Show("Archivo guardado con éxito en: " + saveFileDialog.FileName);
             }
+        }
+
+        private void btnComprobarSintaxis_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string archivoTokens = txtTokens.Text;
+                string tokens = System.Text.RegularExpressions.Regex.Replace(archivoTokens, @"\s+", " ");
+                List<string> lista = GetTokens(tokens);
+
+                if (TopDownParser.EvaluarSintaxis(lista) == true)
+                    MessageBox.Show("Cadena aceptada");
+                else
+                    throw new Exception(TopDownParser.errorMessage);
+                
+            }
+            catch (Exception ex) 
+            { 
+                MessageBox.Show(ex.Message,"ERROR", MessageBoxButtons.OK , MessageBoxIcon.Error);
+            }
+        }
+
+        private static List<string> GetTokens(string archivoTokens)
+        {
+            string cleanedTokens = Regex.Replace(archivoTokens, @"\s+", " ");
+            return new List<string>(cleanedTokens.Split(' '));
         }
     }
 }

@@ -1,0 +1,4 @@
+TRU1
+  IDVAL ODA CONSE 
+
+TRU2 
